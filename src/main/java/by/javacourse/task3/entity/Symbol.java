@@ -3,10 +3,15 @@ package by.javacourse.task3.entity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
+
 public class Symbol implements TextComponent{
     private static final Logger logger = LogManager.getLogger();
     private TextComponentType textComponentType;
     private char character;
+    public Symbol(char character) {
+        this.character = character;
+    }
 
     public Symbol(TextComponentType textComponentType, char character) {
         this.textComponentType = textComponentType;
@@ -23,5 +28,41 @@ public class Symbol implements TextComponent{
     public boolean remove(TextComponent textComponent) {
         logger.warn("Unsupported operation of remove symbol");
         throw new UnsupportedOperationException("Unsupported operation of remove symbol");
+    }
+
+
+    @Override
+    public TextComponentType getType() {
+        return textComponentType;
+    }
+
+    @Override
+    public List<TextComponent> getComponents() {
+        throw new UnsupportedOperationException("cant get element from leaf");
+    }
+
+    @Override
+    public void setComponents(List<TextComponent> components) {
+
+    }
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result = 31 * result + character;
+        result = 31 * result + ((textComponentType == null) ? 0 : textComponentType.hashCode());
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        Symbol symbol = (Symbol) obj;
+
+        return character == symbol.character && textComponentType.equals(symbol.textComponentType);
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(character);
     }
 }
