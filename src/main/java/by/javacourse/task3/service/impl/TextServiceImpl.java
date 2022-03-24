@@ -13,15 +13,13 @@ import java.util.*;
 
 public class TextServiceImpl implements TextService {
     private static final Logger logger = LogManager.getLogger();
-    public static final String VOWEL_REGEX = "[aAeEiIoOuUyY]";
+    public static final String VOWELS_REGEX = "[aAeEiIoOuUyY]";
+    public static final String CONSONANTS_REGEX = "[qQwWrRtTpPsSdDfFgGhHjJkKlLzZxXcCvVbBnNmM]";
 
 
     @Override
     public List<TextComponent> sortParagraphs(TextComposite textComposite) throws TextCustomException {
-        if (textComposite == null || textComposite.getType() != TextComponentType.TEXT) {
-            logger.error("Component is incorrect");
-            throw new TextCustomException("Component is incorrect");
-        }
+        check(textComposite, TextComponentType.TEXT);
         List<TextComponent> result = textComposite.getComponents();
         result.sort(new TextComparator());
         return result;
@@ -29,10 +27,7 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public List<TextComponent> findSentenceWithLongestWord(TextComposite textComposite) throws TextCustomException {
-        if (textComposite == null || textComposite.getType() != TextComponentType.TEXT) {
-            logger.error("Component is incorrect");
-            throw new TextCustomException("Component is incorrect");
-        }
+        check(textComposite, TextComponentType.TEXT);
         int maxLength = 0;
         List<TextComponent> result = new ArrayList<>();
         List<TextComponent> paragraphs = textComposite.getComponents();
@@ -56,42 +51,20 @@ public class TextServiceImpl implements TextService {
     }
 
     @Override
-    public List<TextComponent> deleteSentencesWithLessWords(TextComposite textComposite, int wordsAmount) throws TextCustomException {
-        if (textComposite == null || textComposite.getType() != TextComponentType.TEXT) {
-            logger.error("Component is incorrect");
-            throw new TextCustomException("Component is incorrect");
+    public void deleteSentencesWithLessWords(TextComposite textComposite, int wordsAmount) throws TextCustomException {
+        check(textComposite, TextComponentType.TEXT);
+        for (TextComponent paragraph : textComposite.getComponents()) {
+            paragraph.getComponents().removeIf(sentence -> sentence.getComponents().size() < wordsAmount);
         }
-        int count = 0;
-        List<TextComponent> paragraphs = textComposite.getComponents();
-        for (TextComponent paragraph : paragraphs) {
-            List<TextComponent> sentences = paragraph.getComponents();
-            for (TextComponent sentence : sentences) {
-                List<TextComponent> lexemes = sentence.getComponents();
-                for (TextComponent lexeme : lexemes) {
-                    List<TextComponent> wordsWithPunctuations = lexeme.getComponents();
-                    for (TextComponent word : wordsWithPunctuations) {
-                        if (word.getType() == TextComponentType.WORD) {
-                            count++;
-                        }
-                    }
-                }
-                if (count < wordsAmount) {
-                    paragraph.getComponents().remove(sentence);
-                    //paragraphs.remove(sentence);
-                }
-            }
-        }
-        return textComposite.getComponents();
+        textComposite.getComponents().removeIf(paragraph -> paragraph.getComponents().size() == 0);
+
     }
 
 
     @Override
     public Map<String, Integer> findRepeatWords(TextComposite textComposite) throws TextCustomException {
-        if (textComposite == null || textComposite.getType() != TextComponentType.TEXT) {
-            logger.error("Component is incorrect");
-            throw new TextCustomException("Component is incorrect");
-        }
-        Map<String, Integer> result = new HashMap<>();
+        check(textComposite, TextComponentType.TEXT);
+        Map<String, Integer> result = new LinkedHashMap<>();
         List<TextComponent> paragraphs = textComposite.getComponents();
         for (TextComponent paragraph : paragraphs) {
             List<TextComponent> sentences = paragraph.getComponents();
@@ -108,20 +81,23 @@ public class TextServiceImpl implements TextService {
 
                             }
                             result.put(wordWithoutCase, counter);
+
+
                         }
+
                     }
+
                 }
+
             }
+
         }
         return result;
     }
 
     @Override
     public Map<Integer, Integer> countVowelsAndConsonants(TextComponent sentence) throws TextCustomException {
-        if (sentence == null || sentence.getType() != TextComponentType.SENTENCE) {
-            logger.error("Component is incorrect");
-            throw new TextCustomException("Component is incorrect");
-        }
+        check(sentence, TextComponentType.SENTENCE);
         int counter_vowels = 0;
         int counter_consonants = 0;
         List<TextComponent> lexemes = sentence.getComponents();
@@ -134,9 +110,10 @@ public class TextServiceImpl implements TextService {
                 if (word.getType() == TextComponentType.WORD) {
                     List<TextComponent> symbols = word.getComponents();
                     for (TextComponent symbol : symbols) {
-                        if (symbol.toString().matches(VOWEL_REGEX)) {
+
+                        if (symbol.toString().matches(VOWELS_REGEX)) {
                             counter_vowels++;
-                        } else {
+                        } else if (symbol.toString().matches(CONSONANTS_REGEX)) {
                             counter_consonants++;
                         }
                     }
@@ -145,5 +122,12 @@ public class TextServiceImpl implements TextService {
         }
         countSymbol = Collections.singletonMap(counter_vowels, counter_consonants);
         return countSymbol;
+    }
+
+    private void check(TextComponent textComponent, TextComponentType textComponentType) throws TextCustomException {
+        if (textComponent == null || textComponent.getType() != textComponentType) {
+            logger.error("Component is incorrect");
+            throw new TextCustomException("Component is incorrect");
+        }
     }
 }

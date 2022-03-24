@@ -5,13 +5,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
-public class Symbol implements TextComponent{
+public class Symbol implements TextComponent {
     private static final Logger logger = LogManager.getLogger();
     private TextComponentType textComponentType;
     private char character;
-    public Symbol(char character) {
-        this.character = character;
-    }
 
     public Symbol(TextComponentType textComponentType, char character) {
         this.textComponentType = textComponentType;
@@ -41,10 +38,7 @@ public class Symbol implements TextComponent{
         throw new UnsupportedOperationException("cant get element from leaf");
     }
 
-    @Override
-    public void setComponents(List<TextComponent> components) {
 
-    }
     @Override
     public int hashCode() {
         int result = 1;
@@ -52,6 +46,7 @@ public class Symbol implements TextComponent{
         result = 31 * result + ((textComponentType == null) ? 0 : textComponentType.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

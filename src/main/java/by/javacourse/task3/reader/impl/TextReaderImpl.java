@@ -13,11 +13,10 @@ import java.nio.file.Paths;
 
 public class TextReaderImpl implements TextReader {
     private static final Logger logger = LogManager.getLogger();
-    String text;
 
     @Override
     public String readTextFromFile(String pathToFile) throws TextCustomException {
-
+        String text;
 
         try {
             text = Files.readString(Paths.get(pathToFile));

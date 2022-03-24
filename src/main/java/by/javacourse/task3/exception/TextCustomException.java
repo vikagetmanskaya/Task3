@@ -1,6 +1,6 @@
 package by.javacourse.task3.exception;
 
-public class TextCustomException extends Exception{
+public class TextCustomException extends Exception {
     public TextCustomException() {
     }
 

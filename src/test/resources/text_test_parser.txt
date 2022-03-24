@@ -1,0 +1,4 @@
+	It was a trip across the country. My trip!
+	Time to work, a!=b, ob.toString?
+	Calculate (-5-3)*2 please.
+	Bye.

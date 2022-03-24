@@ -3,7 +3,7 @@ package by.javacourse.task3.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextComposite implements TextComponent{
+public class TextComposite implements TextComponent {
     private List<TextComponent> components = new ArrayList<>();
     private TextComponentType textComponentType;
 
@@ -25,14 +25,12 @@ public class TextComposite implements TextComponent{
     public TextComponentType getType() {
         return textComponentType;
     }
+
     @Override
     public List<TextComponent> getComponents() {
         return components;
     }
-    @Override
-    public void setComponents(List<TextComponent> components) {
-        this.components = components;
-    }
+
     @Override
     public int hashCode() {
         int result = 1;
@@ -40,6 +38,7 @@ public class TextComposite implements TextComponent{
         result = 31 * result + ((textComponentType == null) ? 0 : textComponentType.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -48,12 +47,13 @@ public class TextComposite implements TextComponent{
 
         return components.equals(textComposite.components) && textComponentType.equals(textComposite.textComponentType);
     }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         String delimiter = textComponentType.getDelimiter();
         for (TextComponent textComponent : components) {
-            stringBuilder.append(" " + textComponent.getType() + " [").append(textComponent).append("]").append(delimiter);
+            stringBuilder.append(textComponent.getType() + " [").append(textComponent).append("]").append(delimiter);
         }
         return stringBuilder.toString();
     }

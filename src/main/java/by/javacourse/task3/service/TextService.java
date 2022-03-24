@@ -12,7 +12,7 @@ public interface TextService {
 
     List<TextComponent> findSentenceWithLongestWord(TextComposite textComposite) throws TextCustomException;
 
-    List<TextComponent> deleteSentencesWithLessWords(TextComposite composite, int wordsAmount) throws TextCustomException;
+    void deleteSentencesWithLessWords(TextComposite composite, int wordsAmount) throws TextCustomException;
 
     Map<String, Integer> findRepeatWords(TextComposite textComposite) throws TextCustomException;
 

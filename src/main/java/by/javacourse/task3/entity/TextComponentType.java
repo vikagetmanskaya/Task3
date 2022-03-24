@@ -6,8 +6,8 @@ public enum TextComponentType {
     SENTENCE("\s"),
     LEXEME(" "),
     WORD("\s"),
+    NUMBER(""),
     SYMBOL(""),
-    LETTER(""),
     PUNCTUATION_MARK("");
 
     private String delimiter;
